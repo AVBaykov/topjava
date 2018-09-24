@@ -26,20 +26,4 @@ public class UserMealWithExceed {
     public String toString() {
         return dateTime +" " + description +" " + calories + " " + exceed;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserMealWithExceed that = (UserMealWithExceed) o;
-        return calories == that.calories &&
-                exceed == that.exceed &&
-                Objects.equals(dateTime, that.dateTime) &&
-                Objects.equals(description, that.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(dateTime, description, calories, exceed);
-    }
 }

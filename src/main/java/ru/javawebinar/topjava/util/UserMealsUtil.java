@@ -20,11 +20,9 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
         );
-        List<UserMealWithExceed> stream = getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-
-        List<UserMealWithExceed> cycle = getFilteredWithExceedInCycle(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-
-        System.out.println(stream.equals(cycle));
+        getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000).forEach(System.out::println);
+        System.out.println();
+        getFilteredWithExceedInCycle(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000).forEach(System.out::println);
     }
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -40,18 +38,15 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExceed> getFilteredWithExceedInCycle(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> map = new HashMap<>();
-        List<UserMeal> filteredList = new ArrayList<>();
-        List<UserMealWithExceed> result = new ArrayList<>();
-
         for (UserMeal um : mealList) {
             map.merge(um.getLocalDate(), um.getCalories(), (oV, nV) -> oV + nV);
-            if (TimeUtil.isBetween(um.getLocatTime(), startTime, endTime)) {
-                filteredList.add(um);
-            }
         }
 
-        for (UserMeal um : filteredList) {
-            result.add(toUserMealWithExceed(um, map.get(um.getLocalDate()) > caloriesPerDay));
+        List<UserMealWithExceed> result = new ArrayList<>();
+        for (UserMeal um : mealList) {
+            if (TimeUtil.isBetween(um.getLocatTime(), startTime, endTime)) {
+                result.add(toUserMealWithExceed(um, map.get(um.getLocalDate()) > caloriesPerDay));
+            }
         }
 
         return result;
