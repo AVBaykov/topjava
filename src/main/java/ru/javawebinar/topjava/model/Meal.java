@@ -21,10 +21,6 @@ public class Meal {
         this(id, meal.dateTime, meal.description, meal.calories);
     }
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this(-1, dateTime, description, calories);
-    }
-
     public Meal(int id, LocalDateTime dateTime, String description, int calories) {
         this.id = id;
         this.dateTime = dateTime;
