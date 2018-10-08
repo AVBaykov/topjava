@@ -11,11 +11,16 @@
 <h3><a href="index.html">Home</a></h3>
 <table align="center" cellspacing="0" cellpadding="10" rules="all"
        border="3" width="50%">
-    <caption><h2>Еда</h2></caption>
+    <caption>
+        <a href="?action=create">Добавить прием пищи</a>
+        <h2>Еда</h2>
+    </caption>
     <tr>
         <th>Дата/время</th>
         <th>Описание</th>
         <th>Калории</th>
+        <th></th>
+        <th></th>
     </tr>
     <c:forEach var="item" items="${meals}">
         <jsp:useBean id="item" type="ru.javawebinar.topjava.model.MealWithExceed"/>
@@ -24,6 +29,8 @@
             </td>
             <td>${item.description}</td>
             <td>${item.calories}</td>
+            <td><a href="?id=${item.ID}&action=edit">Edit</a></td>
+            <td><a href="?id=${item.ID}&action=delete">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
