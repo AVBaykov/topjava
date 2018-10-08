@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.storage.MealStorage;
-import ru.javawebinar.topjava.storage.StaticMealList;
+import ru.javawebinar.topjava.storage.StaticMealMap;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -25,19 +25,19 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init() {
-        meals = StaticMealList.getMealStorage();
+        meals = StaticMealMap.getMealStorage();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        Integer id = Integer.valueOf(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("id"));
         LocalDate date = LocalDate.parse(request.getParameter("date"));
         LocalTime time = LocalTime.parse(request.getParameter("time"));
         String description = request.getParameter("description");
         int calories = Integer.valueOf(request.getParameter("calories"));
         Meal meal = new Meal(id, LocalDateTime.of(date, time), description, calories);
         if (id != -1) {
-            meals.update(id, meal);
+            meals.update(meal);
         } else {
             meals.save(meal);
         }
@@ -50,7 +50,7 @@ public class MealServlet extends HttpServlet {
         String id = request.getParameter("id");
         String action = request.getParameter("action");
         if (action == null) {
-            List<MealWithExceed> exceeds = MealsUtil.getAllWithExceed(meals.getAllMeals(), 2000);
+            List<MealWithExceed> exceeds = MealsUtil.getAllWithExceed(meals.getAll(), 2000);
             request.setAttribute("meals", exceeds);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             return;

@@ -16,13 +16,8 @@ public class MapMealStorage implements MealStorage {
 
 
     @Override
-    public void clear() {
-        mealMap.clear();
-    }
-
-    @Override
-    public void update(Integer id, Meal meal) {
-        mealMap.put(id, meal);
+    public void update(Meal meal) {
+        mealMap.put(meal.getId(), meal);
     }
 
     @Override
@@ -42,12 +37,7 @@ public class MapMealStorage implements MealStorage {
     }
 
     @Override
-    public List<Meal> getAllMeals() {
+    public List<Meal> getAll() {
         return new ArrayList<>(mealMap.values());
-    }
-
-    @Override
-    public int size() {
-        return mealMap.size();
     }
 }

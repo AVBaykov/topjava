@@ -7,7 +7,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StaticMealList {
+public class StaticMealMap {
 
     private static List<Meal> meals = new ArrayList<>();
 
@@ -22,10 +22,6 @@ public class StaticMealList {
         meals.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
 
         meals.forEach(meal -> mealStorage.save(meal));
-    }
-
-    public static List<Meal> getMeals() {
-        return meals;
     }
 
     public static MapMealStorage getMealStorage() {

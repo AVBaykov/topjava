@@ -29,8 +29,8 @@
             </td>
             <td>${item.description}</td>
             <td>${item.calories}</td>
-            <td><a href="?id=${item.ID}&action=edit">Edit</a></td>
-            <td><a href="?id=${item.ID}&action=delete">Delete</a></td>
+            <td><a href="?id=${item.id}&action=edit">Edit</a></td>
+            <td><a href="?id=${item.id}&action=delete">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

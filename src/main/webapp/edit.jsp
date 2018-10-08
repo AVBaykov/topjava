@@ -6,7 +6,7 @@
 <body>
 <section>
     <form method="post">
-        <input type="hidden" name="id" value="${meal.ID}">
+        <input type="hidden" name="id" value="${meal.id}">
         <p>Дата приема пищи: <input type="date" name="date" value="${meal.date}"></p>
         <p>Время приема пищи: <input type="time" name="time" value="${meal.time}"></p>
         <p>Тип приема пищи: <input type="text" name="description" value="${meal.description}"></p>
