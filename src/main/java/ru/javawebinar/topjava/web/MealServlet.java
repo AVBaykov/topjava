@@ -36,7 +36,7 @@ public class MealServlet extends HttpServlet {
         String description = request.getParameter("description");
         int calories = Integer.valueOf(request.getParameter("calories"));
         Meal meal = new Meal(LocalDateTime.of(date, time), description, calories);
-        if (id > -1) {
+        if (id != -1) {
             meals.update(id, meal);
         } else {
             meals.save(meal);
