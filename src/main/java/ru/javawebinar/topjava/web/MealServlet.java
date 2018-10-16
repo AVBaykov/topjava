@@ -2,7 +2,10 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -11,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -23,13 +28,27 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        controller = new MealRestController();
+        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
+            controller = appCtx.getBean(MealRestController.class);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
+        String button = request.getParameter("button");
+        if (button.equals("filter")) {
+            LocalDate startDate = DateTimeUtil.toDate(request.getParameter("startDate"));
+            LocalDate endDate = DateTimeUtil.toDate(request.getParameter("endDate"));
+            LocalTime startTime = DateTimeUtil.toTime(request.getParameter("startTime"));
+            LocalTime endTime = DateTimeUtil.toTime(request.getParameter("endTime"));
+            request.setAttribute("meals", controller.getFilteredWithExceeded(startDate, endDate, startTime, endTime));
+            request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        } else if (button.equals("reset")) {
+            request.setAttribute("meals", controller.getAllWithExceeded());
+            request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        }
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
@@ -37,7 +56,11 @@ public class MealServlet extends HttpServlet {
                 Integer.parseInt(request.getParameter("calories")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        controller.create(meal);
+        if (meal.isNew()) {
+            controller.create(meal);
+        } else {
+            controller.update(meal);
+        }
         response.sendRedirect("meals");
     }
 
@@ -62,7 +85,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                log.info("getAllSortedByName");
+                log.info("getAll");
                 request.setAttribute("meals", controller.getAllWithExceeded());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

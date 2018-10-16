@@ -23,15 +23,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
+        meal.setUserId(userId);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
         }
         // treat case: update, but absent in storage
-        if (userId == meal.getUserId()) {
-            return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        Meal baseMeal = repository.get(meal.getId());
+        if (baseMeal != null && baseMeal.getUserId() == userId) {
+            return repository.put(meal.getId(), meal);
         } else {
             return null;
         }
