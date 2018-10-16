@@ -38,14 +38,14 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
         String button = request.getParameter("button");
-        if (button.equals("filter")) {
+        if ("filter".equals(button)) {
             LocalDate startDate = DateTimeUtil.toDate(request.getParameter("startDate"));
             LocalDate endDate = DateTimeUtil.toDate(request.getParameter("endDate"));
             LocalTime startTime = DateTimeUtil.toTime(request.getParameter("startTime"));
             LocalTime endTime = DateTimeUtil.toTime(request.getParameter("endTime"));
             request.setAttribute("meals", controller.getFilteredWithExceeded(startDate, endDate, startTime, endTime));
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
-        } else if (button.equals("reset")) {
+        } else if ("reset".equals(button)) {
             request.setAttribute("meals", controller.getAllWithExceeded());
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
         }
