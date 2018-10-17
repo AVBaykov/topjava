@@ -10,12 +10,8 @@ public class DateTimeUtil {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static boolean isBetweenDate(LocalDate ld, LocalDate startDate, LocalDate endDate) {
-        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0;
-    }
-
-    public static boolean isBetweenTime(LocalTime lt, LocalTime startTime, LocalTime endTime) {
-        return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
+    public static <V extends Comparable<V>> boolean isBetween(V value, V startValue, V endValue) {
+        return value.compareTo(startValue) >= 0 && value.compareTo(endValue) <= 0;
     }
 
     public static LocalDate toDate(String string) {

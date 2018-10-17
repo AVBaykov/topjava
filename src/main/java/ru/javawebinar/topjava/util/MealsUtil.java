@@ -26,6 +26,15 @@ public class MealsUtil {
             new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
     );
 
+    public static final List<Meal> MORE_MEALS = Arrays.asList(
+            new Meal(LocalDateTime.of(2016, Month.MAY, 11, 10, 0), "Завтрак", 500),
+            new Meal(LocalDateTime.of(2016, Month.MAY, 11, 13, 0), "Обед", 1000),
+            new Meal(LocalDateTime.of(2016, Month.MAY, 11, 20, 0), "Ужин", 500),
+            new Meal(LocalDateTime.of(2016, Month.MAY, 12, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2016, Month.MAY, 12, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2016, Month.MAY, 12, 20, 0), "Ужин", 510)
+    );
+
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
     public static List<MealWithExceed> getWithExceeded(Collection<Meal> meals, int caloriesPerDay) {
@@ -36,8 +45,8 @@ public class MealsUtil {
                                                                LocalDate startDate, LocalDate endDate,
                                                                LocalTime startTime, LocalTime endTime) {
         return getFilteredWithExceeded(meals, caloriesPerDay,
-                meal -> DateTimeUtil.isBetweenDate(meal.getDate(), startDate, endDate),
-                meal -> DateTimeUtil.isBetweenTime(meal.getTime(), startTime, endTime));
+                meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate),
+                meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime));
     }
 
     private static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, int caloriesPerDay,
