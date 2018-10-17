@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.web.SecurityUtil.*;
+import static ru.javawebinar.topjava.web.SecurityUtil.getAuthUserId;
 
 @Controller
 public class MealRestController {
@@ -23,23 +24,19 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-    private List<Meal> getAll() {
-        log.info("getAll");
-        return service.getAll(getAuthUserId());
-    }
 
     public List<MealWithExceed> getAllWithExceeded() {
         log.info("getAllWithExceed");
-        return MealsUtil.getWithExceeded(getAll(), SecurityUtil.authUserCaloriesPerDay());
+        return service.getAll(getAuthUserId(), SecurityUtil.authUserCaloriesPerDay());
     }
 
     public List<MealWithExceed> getFilteredWithExceeded(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        LocalDate sDate = startDate != null ? startDate : LocalDate.MIN;
-        LocalDate eDate = endDate != null ? endDate : LocalDate.MAX;
-        LocalTime sTime = startTime != null ? startTime : LocalTime.MIN;
-        LocalTime eTime = endTime != null ? endTime : LocalTime.MAX;
-        return MealsUtil.getFilteredWithExceeded(getAll(), SecurityUtil.authUserCaloriesPerDay(), sDate, eDate, sTime, eTime);
+        LocalDate startD = startDate != null ? startDate : LocalDate.MIN;
+        LocalDate endD = endDate != null ? endDate : LocalDate.MAX;
+        LocalTime startT = startTime != null ? startTime : LocalTime.MIN;
+        LocalTime endT = endTime != null ? endTime : LocalTime.MAX;
 
+        return service.getFilteredWithExceed(getAuthUserId(), SecurityUtil.authUserCaloriesPerDay(), startD, endD, startT, endT);
     }
 
     public Meal get(int id) {
