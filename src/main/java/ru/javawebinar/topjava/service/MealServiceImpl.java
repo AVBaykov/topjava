@@ -56,7 +56,10 @@ public class MealServiceImpl implements MealService {
                                                       LocalDate startDate,
                                                       LocalDate endDate, LocalTime startTime,
                                                       LocalTime endTime) {
-        return MealsUtil.getFilteredWithExceeded(repository.getAllWithFilter(userId, meal ->
-                DateTimeUtil.isBetween(meal.getDate(), startDate, endDate)), caloriesPerDay, startTime, endTime);
+        return MealsUtil.getFilteredWithExceeded(
+                repository.getAllWithFilter(userId, meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate)),
+                caloriesPerDay,
+                startTime,
+                endTime);
     }
 }
