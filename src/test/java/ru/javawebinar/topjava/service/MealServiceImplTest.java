@@ -40,13 +40,13 @@ public class MealServiceImplTest {
 
     @Test(expected = DataAccessException.class)
     public void duplicateUserDateTimeCreate() {
-        service.create(new Meal(USER_100002.getDateTime(), "Bad desc", 10_000), USER_ID);
+        service.create(new Meal(USER_MEAL_1.getDateTime(), "Bad desc", 10_000), USER_ID);
     }
 
     @Test
     public void get() {
-        Meal meal = service.get(100002, USER_ID);
-        assertMatch(meal, USER_100002);
+        Meal meal = service.get(USER_MEAL_1.getId(), USER_ID);
+        assertMatch(meal, USER_MEAL_1);
     }
 
     @Test(expected = NotFoundException.class)
@@ -57,11 +57,11 @@ public class MealServiceImplTest {
     @Test(expected = NotFoundException.class)
     public void delete() {
         try {
-            service.delete(100002, USER_ID);
+            service.delete(USER_MEAL_1.getId(), USER_ID);
         } catch (NotFoundException e) {
             fail("Trying to delete nonexistence meal");
         }
-        service.get(100002, USER_ID);
+        service.get(USER_MEAL_1.getId(), USER_ID);
     }
 
     @Test(expected = NotFoundException.class)
@@ -71,49 +71,38 @@ public class MealServiceImplTest {
 
     @Test
     public void getBetweenDateTimes() {
-        List<Meal> filtered = service.getBetweenDateTimes(USER_100003.getDateTime(), USER_100006.getDateTime(), USER_ID);
-        assertMatch(filtered, USER_100006, USER_100005, USER_100004, USER_100003);
+        List<Meal> filtered = service.getBetweenDateTimes(USER_MEAL_2.getDateTime(), USER_MEAL_5.getDateTime(), USER_ID);
+        assertMatch(filtered, USER_MEAL_5, USER_MEAL_4, USER_MEAL_3, USER_MEAL_2);
     }
 
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(ADMIN_ID);
-        assertMatch(all, ADMIN_100009, ADMIN_100008);
+        assertMatch(all, ADMIN_MEAL_2, ADMIN_MEAL_1);
     }
 
     @Test
     public void update() {
-        Meal updated = new Meal(USER_100002);
+        Meal updated = new Meal(USER_MEAL_1);
         updated.setDescription("Второй завтрак");
         updated.setCalories(1001);
         service.update(updated, USER_ID);
-        assertMatch(service.get(100002, USER_ID), updated);
+        assertMatch(service.get(USER_MEAL_1.getId(), USER_ID), updated);
     }
 
     @Test(expected = NotFoundException.class)
     public void getForeign() {
-        consistenceCheck(ADMIN_100008.getId(), ADMIN_ID);
-        service.get(ADMIN_100008.getId(), USER_ID);
+        service.get(ADMIN_MEAL_1.getId(), USER_ID);
     }
 
     @Test(expected = NotFoundException.class)
     public void deleteForeign() {
-        consistenceCheck(ADMIN_100008.getId(), ADMIN_ID);
-        service.delete(ADMIN_100008.getId(), USER_ID);
+        service.delete(ADMIN_MEAL_1.getId(), USER_ID);
     }
 
     @Test(expected = NotFoundException.class)
     public void updateForeign() {
-        consistenceCheck(ADMIN_100008.getId(), ADMIN_ID);
-        Meal updated = new Meal(ADMIN_100008);
+        Meal updated = new Meal(ADMIN_MEAL_1);
         service.update(updated, USER_ID);
-    }
-
-    private void consistenceCheck(int id, int userId) {
-        try {
-            service.get(id, userId);
-        } catch (NotFoundException e) {
-            fail("Trying to get nonexistence meal");
-        }
     }
 }

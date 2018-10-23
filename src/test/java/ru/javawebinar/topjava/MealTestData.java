@@ -10,14 +10,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MealTestData {
 
-    public static final Meal USER_100002 = new Meal(100002, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500);
-    public static final Meal USER_100003 = new Meal(100003, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
-    public static final Meal USER_100004 = new Meal(100004, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500);
-    public static final Meal USER_100005 = new Meal(100005, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000);
-    public static final Meal USER_100006 = new Meal(100006, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500);
-    public static final Meal USER_100007 = new Meal(100007, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510);
-    public static final Meal ADMIN_100008 = new Meal(100008, LocalDateTime.of(2015, Month.JUNE, 2, 9, 0), "Админ завтрак", 500);
-    public static final Meal ADMIN_100009 = new Meal(100009, LocalDateTime.of(2015, Month.JUNE, 2, 12, 30), "Админ обед", 1000);
+    public static final Meal USER_MEAL_1 = new Meal(100002, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500);
+    public static final Meal USER_MEAL_2 = new Meal(100003, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000);
+    public static final Meal USER_MEAL_3 = new Meal(100004, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500);
+    public static final Meal USER_MEAL_4 = new Meal(100005, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000);
+    public static final Meal USER_MEAL_5 = new Meal(100006, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500);
+    public static final Meal USER_MEAL_6 = new Meal(100007, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510);
+    public static final Meal ADMIN_MEAL_1 = new Meal(100008, LocalDateTime.of(2015, Month.JUNE, 2, 9, 0), "Админ завтрак", 500);
+    public static final Meal ADMIN_MEAL_2 = new Meal(100009, LocalDateTime.of(2015, Month.JUNE, 2, 12, 30), "Админ обед", 1000);
 
     public static void assertMatch(Meal actual, Meal expected) {
         assertThat(actual).isEqualToComparingFieldByField(expected);
