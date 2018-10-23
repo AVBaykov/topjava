@@ -21,6 +21,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-repository.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
@@ -50,11 +51,6 @@ public class MealServiceImplTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void getNotFound() {
-        service.get(1, 1);
-    }
-
-    @Test(expected = NotFoundException.class)
     public void delete() {
         try {
             service.delete(USER_MEAL_1.getId(), USER_ID);
@@ -62,11 +58,6 @@ public class MealServiceImplTest {
             fail("Trying to delete nonexistence meal");
         }
         service.get(USER_MEAL_1.getId(), USER_ID);
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void deleteNotFound() {
-        service.delete(1, 1);
     }
 
     @Test
