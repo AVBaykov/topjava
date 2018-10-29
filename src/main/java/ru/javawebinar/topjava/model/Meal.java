@@ -1,19 +1,51 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.Range;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m SET m.description=:description, m.dateTime=:dateTime, " +
+                "m.calories=:calories WHERE m.id=:id AND m.user.id=:userId"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
+        @NamedQuery(name = Meal.ALL_SORTED_BY_DATE_DESC, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.GET_BETWEEN_DATES, query =
+                "SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime between :startDate and :endDate ORDER BY m.dateTime desc"),
+})
+@Entity
+@Table(name = "meals", uniqueConstraints =
+        {
+                @UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meals_unique_user_datetime_idx")
+        })
 public class Meal extends AbstractBaseEntity {
+
+    public static final String UPDATE = "Meal.update";
+    public static final String DELETE = "Meal.delete";
+    public static final String GET_BETWEEN_DATES = "Meal.getBetween";
+    public static final String ALL_SORTED_BY_DATE_DESC = "Meal.getAllSorted";
+
+    @NotNull
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @NotBlank
+    @Size(min = 2, max = 50)
+    @Column(name = "description", nullable = false)
     private String description;
 
+    @NotNull
+    @Range(min = 0, max = 10000)
+    @Column(name = "calories", nullable = false)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Meal() {
