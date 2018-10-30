@@ -8,7 +8,7 @@
         <withJansi>true</withJansi>
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %class{50}.%M:%L - %cyan(%msg%n)</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level %class{50}.%M:%L) - %cyan(%msg%n)</pattern>
         </encoder>
     </appender>
 
