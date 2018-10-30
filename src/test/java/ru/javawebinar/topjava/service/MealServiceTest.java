@@ -1,9 +1,10 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.ClassRule;
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -20,6 +21,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -46,21 +50,29 @@ public class MealServiceTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Rule
-    public TestRule watcher = new TestWatcher() {
-        private long start;
+    private static StringBuilder sb = new StringBuilder();
 
-        protected void starting(Description description) {
-            log.info("Starting test: " + description.getMethodName());
-            start = System.currentTimeMillis();
-        }
+    private static void logInfo(Description description, long nanos) {
+        String testName = description.getMethodName();
+        Long ms = TimeUnit.NANOSECONDS.toMillis(nanos);
+        String format = String.format("Test %s, spent %d ms", testName, ms);
+        log.info(format);
+        sb.append("\n").append(format);
+    }
+
+    @Rule
+    public Stopwatch stopwatch = new Stopwatch() {
 
         @Override
-        protected void finished(Description description) {
-            long end = System.currentTimeMillis();
-            log.info("Test " + description.getMethodName() + " took " + (end - start) + "ms");
+        protected void finished(long nanos, Description description) {
+            logInfo(description, nanos);
         }
     };
+
+    @AfterClass
+    public static void results() {
+        log.info(sb.toString());
+    }
 
     @Test
     public void delete() throws Exception {
