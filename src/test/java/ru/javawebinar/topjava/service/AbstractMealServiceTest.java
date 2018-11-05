@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -35,10 +36,12 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-public class MealServiceTest {
+public abstract class AbstractMealServiceTest {
     private static final Logger log = getLogger("result");
 
     private static StringBuilder results = new StringBuilder();
+
+    private static String className;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -51,6 +54,9 @@ public class MealServiceTest {
             String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
             results.append(result);
             log.info(result + " ms\n");
+            if (className == null) {
+                className = description.getClassName();
+            }
         }
     };
 
@@ -59,9 +65,15 @@ public class MealServiceTest {
         SLF4JBridgeHandler.install();
     }
 
+    @BeforeClass
+    public static void initResults() {
+        results = new StringBuilder();
+    }
+
     @AfterClass
     public static void printResult() {
-        log.info("\n---------------------------------" +
+        log.info(className+
+                "\n---------------------------------" +
                 "\nTest                 Duration, ms" +
                 "\n---------------------------------" +
                 results +
