@@ -10,6 +10,7 @@ import java.time.Month;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
+import static ru.javawebinar.topjava.UserTestData.NOT_EXIST_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 public abstract class AbstractMealServiceTest extends AbstractServiceTest {
@@ -26,7 +27,7 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     @Test
     public void deleteNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
-        service.delete(MEAL1_ID, 1);
+        service.delete(MEAL1_ID, NOT_EXIST_ID);
     }
 
     @Test

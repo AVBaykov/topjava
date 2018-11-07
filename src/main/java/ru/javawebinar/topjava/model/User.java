@@ -134,6 +134,7 @@ public class User extends AbstractNamedEntity {
         this.roles = CollectionUtils.isEmpty(roles) ? Collections.emptySet() : EnumSet.copyOf(roles);
     }
 
+    
     @Override
     public String toString() {
         return "User{" +
