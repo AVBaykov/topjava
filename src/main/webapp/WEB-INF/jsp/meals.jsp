@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Calories management</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/resources/css/style.css">
 </head>
 <body>
 <section>
@@ -30,7 +30,7 @@
         <button type="submit">Filter</button>
     </form>
     <hr/>
-    <a href="meals?action=create">Add Meal</a>
+    <a href="meals/create">Add Meal</a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>

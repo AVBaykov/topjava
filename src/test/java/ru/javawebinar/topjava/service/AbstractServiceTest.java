@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -8,6 +9,8 @@ import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -35,6 +38,20 @@ abstract public class AbstractServiceTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Autowired
+    protected Environment environment;
+
+    protected static boolean profileJDBC = false;
+
+    @Before
+    public void checkProfile() {
+        for (String profile : environment.getActiveProfiles()) {
+            if (profile.contains("jdbc")) {
+                profileJDBC = true;
+            }
+        }
+    }
 
     static {
         // needed only for java.util.logging (postgres driver)
