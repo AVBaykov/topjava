@@ -1,30 +1,26 @@
 package ru.javawebinar.topjava.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-@Controller
-@RequestMapping (value = "/meals")
-public class JspMealController {
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
-    @Autowired
-    private MealService service;
+@Controller
+@RequestMapping(value = "/meals")
+public class JspMealController extends AbstractMealController {
 
     @GetMapping
     public String meals(Model model) {
-        int userId = SecurityUtil.authUserId();
-        model.addAttribute("meals", MealsUtil.getWithExcess(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay()));
+        model.addAttribute("meals", super.getAll());
         return "meals";
     }
 
@@ -35,14 +31,37 @@ public class JspMealController {
         return "mealForm";
     }
 
+    @GetMapping("{id}/update")
+    public String update(@PathVariable("id") int id, Model model) {
+        model.addAttribute("meal", super.get(id));
+        return "mealForm";
+    }
+
     @PostMapping("save")
-    public String save(HttpServletRequest request) {
-        int userId = SecurityUtil.authUserId();
-        Meal meal = new Meal(
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")));
-        service.create(meal, userId);
+    public String saveCreate(@ModelAttribute Meal meal) {
+        super.create(meal);
         return "redirect:/meals";
+    }
+
+    @PostMapping("{id}/save")
+    public String saveUpdate(@PathVariable("id") int id, @ModelAttribute Meal meal) {
+        super.update(meal, id);
+        return "redirect:/meals";
+    }
+
+    @GetMapping("{id}/delete")
+    public String del(@PathVariable("id") int id) {
+        super.delete(id);
+        return "redirect:/meals";
+    }
+
+    @PostMapping("filter")
+    public String filter(HttpServletRequest request, Model model) {
+        LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+        LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+        LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+        LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+        model.addAttribute("meals", getBetween(startDate, startTime, endDate, endTime));
+        return "meals";
     }
 }
