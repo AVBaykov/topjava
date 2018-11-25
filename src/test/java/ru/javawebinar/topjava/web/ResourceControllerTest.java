@@ -13,7 +13,7 @@ public class ResourceControllerTest extends AbstractControllerTest {
     void testStyleCss() throws Exception {
         mockMvc.perform(get("/resources/css/style.css"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("css"))
+                .andExpect(content().contentType("text/css"))
                 .andDo(print());
     }
 }
