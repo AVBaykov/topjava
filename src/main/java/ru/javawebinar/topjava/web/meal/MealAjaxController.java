@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ajax/meals")
+@RequestMapping("/ajax/profile/meals")
 public class MealAjaxController extends AbstractMealController {
 
     @Override
