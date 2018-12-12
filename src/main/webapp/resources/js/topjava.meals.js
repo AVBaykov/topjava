@@ -62,3 +62,39 @@ $(function () {
         }
     });
 });
+
+$.datetimepicker.setLocale('ru');
+
+$("#startDate").datetimepicker({
+    format: 'Y-m-d',
+    onShow:function( ct ) {
+        this.setOptions({
+            maxDate:$('#endTime').val()?$('#endDate').val():false
+        })
+    },
+    timepicker: false
+});
+
+$("#endDate").datetimepicker({
+    format: 'Y-m-d',
+    onShow:function( ct ) {
+        this.setOptions({
+            minDate:$('#startDate').val()?$('#startDate').val():false
+        })
+    },
+    timepicker: false
+});
+
+$("#startTime").datetimepicker({
+    datepicker: false,
+    format: 'H:i'
+});
+
+$("#endTime").datetimepicker({
+    datepicker: false,
+    format: 'H:i'
+});
+
+$("#dateTime").datetimepicker({
+    format: 'Y-m-d H:i'
+});
