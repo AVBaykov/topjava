@@ -32,7 +32,7 @@ public class UserValidator implements Validator {
 
             if (user != null) {
                 if (auth == null || !user.getId().equals(auth.getId())) {
-                    errors.rejectValue("email", "common.duplicate.user.email", "User with this email already exists");
+                    reject(errors);
                 }
             }
         } else if (target instanceof User) {
@@ -40,8 +40,12 @@ public class UserValidator implements Validator {
             user = userRepository.getByEmail(targetUser.getEmail());
 
             if (user != null && !user.getId().equals(targetUser.getId())) {
-                errors.rejectValue("email", "common.duplicate.user.email", "User with this email already exists");
+                reject(errors);
             }
         }
+    }
+
+    private static void reject(Errors errors) {
+        errors.rejectValue("email", "common.duplicate.user.email", "User with this email already exists");
     }
 }

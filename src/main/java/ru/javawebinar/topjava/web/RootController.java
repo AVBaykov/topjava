@@ -13,8 +13,6 @@ import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
-import javax.validation.Valid;
-
 @Controller
 public class RootController extends AbstractUserController {
 
